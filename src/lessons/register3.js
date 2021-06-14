@@ -71,21 +71,24 @@ const email$ = fromEvent(email, 'keydown').pipe(
 		return validEmail(email, validationEmail);
 	}),
 	filter((x) => x), // if it is not a valid email no need to run ajax check
-	// switchMap(() => ajax(emailExists(formData.email))),
+	switchMap(() => ajax(emailExists(formData.email))),
 	tap((jsonData) => {
-		// let result = jsonData.response;
-		let result = { email: 'p@c.com', valid: true, message: 'ALL OK' };
-		console.log(result);
-		console.log(`%c${result.email} available? ${result.valid}`, 'color:green;font-size:18px;');
-		validationEmail.innerHTML += `<b> ${result.email} - ${result.message}</b>`;
-		return result;
+		let result = jsonData.response;
+		console.log('EMAIL EXISTS', result);
+		// let result = { email: 'p@c.com', valid: true, message: 'ALL OK' };
+		// console.log(result);
+		// console.log(`%c${result.email} available? ${result.valid}`, 'color:green;font-size:18px;');
+
+		validationEmail.innerHTML += `<b> ${formData.email} ${result.id} available</b>`;
 	}),
 	tap((result) => {
-		console.log(result);
-		if (true) {
+		console.log('L87', result.status);
+		if (result.status) {
 			formData.emailAvailable = true;
+			console.log('email avail');
 		} else {
 			formData.emailAvailable = false;
+			console.log('email NOT avail');
 		}
 	}),
 );
@@ -102,16 +105,7 @@ const password$ = fromEvent(password, 'keyup').pipe(
 );
 
 const cbo$ = fromEvent(cbo, 'click').pipe(tap(() => (formData.agree = cbo.checked)));
-function registerEmail2(regEmail) {
-	const formData = new FormData();
-	formData.append('data', 'testp@c.com');
 
-	return {
-		url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
-		method: 'POST',
-		body: formData,
-	};
-}
 const ajaxOptions = {
 	method: 'POST',
 	headers: {

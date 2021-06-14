@@ -13,7 +13,7 @@ export function getRandomUsers(x) {
 	return url;
 }
 export function getLocations(x) {
-	const url = 'https://wp-html.co.uk/api/wp-json/wordcamp/v2/locations/lo';
+	const url = 'https://reqres.in/api/user';
 	console.log('URL is  ', url);
 	return url;
 }
@@ -32,7 +32,7 @@ export function emailExists(regEmail) {
 	formData.append('email', regEmail);
 
 	return {
-		url: 'https://wp-html.co.uk/api/wp-json/api/v1/email-available',
+		url: 'https://reqres.in/api/user',
 		method: 'POST',
 		body: formData,
 	};
@@ -42,7 +42,7 @@ export function registerEmail(regEmail) {
 	formData.append('data', regEmail);
 
 	return {
-		url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
+		url: 'https://reqres.in/api/user',
 		method: 'POST',
 		body: formData,
 	};

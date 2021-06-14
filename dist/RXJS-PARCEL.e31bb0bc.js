@@ -11579,7 +11579,7 @@ function getRandomUsers(x) {
 }
 
 function getLocations(x) {
-  var url = 'https://wp-html.co.uk/api/wp-json/wordcamp/v2/locations/lo';
+  var url = 'https://reqres.in/api/user';
   console.log('URL is  ', url);
   return url;
 } // function emailExistsGOOD(regEmail) {
@@ -11598,7 +11598,7 @@ function emailExists(regEmail) {
   var formData = new FormData();
   formData.append('email', regEmail);
   return {
-    url: 'https://wp-html.co.uk/api/wp-json/api/v1/email-available',
+    url: 'https://reqres.in/api/user',
     method: 'POST',
     body: formData
   };
@@ -11608,7 +11608,7 @@ function registerEmail(regEmail) {
   var formData = new FormData();
   formData.append('data', regEmail);
   return {
-    url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
+    url: 'https://reqres.in/api/user',
     method: 'POST',
     body: formData
   };
@@ -11714,25 +11714,24 @@ var email$ = (0, _rxjs.fromEvent)(email, 'keydown').pipe((0, _operators.debounce
 }), (0, _operators.filter)(function (x) {
   return x;
 }), // if it is not a valid email no need to run ajax check
-// switchMap(() => ajax(emailExists(formData.email))),
-(0, _operators.tap)(function (jsonData) {
-  // let result = jsonData.response;
-  var result = {
-    email: 'p@c.com',
-    valid: true,
-    message: 'ALL OK'
-  };
-  console.log(result);
-  console.log("%c".concat(result.email, " available? ").concat(result.valid), 'color:green;font-size:18px;');
-  validationEmail.innerHTML += "<b> ".concat(result.email, " - ").concat(result.message, "</b>");
-  return result;
-}), (0, _operators.tap)(function (result) {
-  console.log(result);
+(0, _operators.switchMap)(function () {
+  return (0, _ajax.ajax)((0, _helpers.emailExists)(formData.email));
+}), (0, _operators.tap)(function (jsonData) {
+  var result = jsonData.response;
+  console.log('EMAIL EXISTS', result); // let result = { email: 'p@c.com', valid: true, message: 'ALL OK' };
+  // console.log(result);
+  // console.log(`%c${result.email} available? ${result.valid}`, 'color:green;font-size:18px;');
 
-  if (true) {
+  validationEmail.innerHTML += "<b> ".concat(formData.email, " ").concat(result.id, " available</b>");
+}), (0, _operators.tap)(function (result) {
+  console.log('L87', result.status);
+
+  if (result.status) {
     formData.emailAvailable = true;
+    console.log('email avail');
   } else {
     formData.emailAvailable = false;
+    console.log('email NOT avail');
   }
 }));
 var password$ = (0, _rxjs.fromEvent)(password, 'keyup').pipe((0, _operators.debounceTime)(750), (0, _operators.map)(function (x) {
@@ -11746,17 +11745,6 @@ var password$ = (0, _rxjs.fromEvent)(password, 'keyup').pipe((0, _operators.debo
 var cbo$ = (0, _rxjs.fromEvent)(cbo, 'click').pipe((0, _operators.tap)(function () {
   return formData.agree = cbo.checked;
 }));
-
-function registerEmail2(regEmail) {
-  var formData = new FormData();
-  formData.append('data', 'testp@c.com');
-  return {
-    url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
-    method: 'POST',
-    body: formData
-  };
-}
-
 var ajaxOptions = {
   method: 'POST',
   headers: {
@@ -11842,7 +11830,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63911" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65364" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
