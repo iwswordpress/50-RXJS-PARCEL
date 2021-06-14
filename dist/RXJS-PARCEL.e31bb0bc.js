@@ -11746,10 +11746,34 @@ var password$ = (0, _rxjs.fromEvent)(password, 'keyup').pipe((0, _operators.debo
 var cbo$ = (0, _rxjs.fromEvent)(cbo, 'click').pipe((0, _operators.tap)(function () {
   return formData.agree = cbo.checked;
 }));
+
+function registerEmail2(regEmail) {
+  var formData = new FormData();
+  formData.append('data', 'testp@c.com');
+  return {
+    url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
+    method: 'POST',
+    body: formData
+  };
+}
+
+var ajaxOptions = {
+  method: 'get',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  }
+};
 var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.switchMap)(function () {
-  return (0, _ajax.ajax)(registerEmail(formData.email));
+  return (0, _ajax.ajax)('https://wp-html.co.uk/greece/wp-json/wp/v2/posts?_fields=authorName,id,content,title,link,acf', ajaxOptions);
 }), (0, _operators.tap)(function (jsonData) {
-  var result = jsonData.response;
+  var result = jsonData.response; // let result = {
+  // 	api: 'wphtml-api-v1-mirror 1.0.0',
+  // 	valid: true,
+  // 	message: 'MIRROR data returned',
+  // 	data: 'testp@c.com',
+  // };
+
   console.log(result);
   output.innerHTML = "Form data sent to server:<br>\n\t\t  email: ".concat(formData.email, "<br>\n\t\t  password: ").concat(formData.password, "<br>\n\t\t  agree:  ").concat(formData.agree, "<br>\n\n\t\t  <b>\n\t\t\tAPI: ").concat(result.api, "<br>\n\t\t\tRegistration status: ").concat(result.valid, "<br>\n\t\t  Message: ").concat(result.message, "</br>\n\t\t  Email: ").concat(result.data, "</b>\n\n\t\t  ");
 }));
@@ -11780,7 +11804,8 @@ var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.switchMa
 }); // Subscribers
 
 button$.subscribe({
-  next: function next(x) {// console.log(`[BUTTON SUBSCRIBE] BUTTON was clicked`);
+  next: function next(x) {
+    console.log("[BUTTON SUBSCRIBE] BUTTON was clicked");
   },
   error: function error(err) {
     console.log('[BTN SUBSCRIBE]', err.message);
@@ -11821,7 +11846,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60844" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52489" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -43,7 +43,7 @@ import {
 	distinct,
 } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
-import { validEmail, validPassword, emailExists } from '../util/helpers.js';
+import { validEmail, validPassword, emailExists, registerEmail } from '../util/helpers.js';
 console.log(`%cREGISTER with JSON SERVER and Users...`, 'color:blue; font-size:18px');
 
 // Store form data
@@ -105,11 +105,38 @@ const password$ = fromEvent(password, 'keyup').pipe(
 );
 
 const cbo$ = fromEvent(cbo, 'click').pipe(tap(() => (formData.agree = cbo.checked)));
+function registerEmail2(regEmail) {
+	const formData = new FormData();
+	formData.append('data', 'testp@c.com');
 
+	return {
+		url: 'https://wp-html.co.uk/api/wp-json/api/v1/mirror',
+		method: 'POST',
+		body: formData,
+	};
+}
+const ajaxOptions = {
+	method: 'get',
+	headers: {
+		'Content-Type': 'application/json',
+		'X-Requested-With': 'XMLHttpRequest',
+	},
+};
 const button$ = fromEvent(button, 'click').pipe(
-	switchMap(() => ajax(registerEmail(formData.email))),
+	switchMap(() =>
+		ajax(
+			'https://wp-html.co.uk/greece/wp-json/wp/v2/posts?_fields=authorName,id,content,title,link,acf',
+			ajaxOptions,
+		),
+	),
 	tap((jsonData) => {
 		let result = jsonData.response;
+		// let result = {
+		// 	api: 'wphtml-api-v1-mirror 1.0.0',
+		// 	valid: true,
+		// 	message: 'MIRROR data returned',
+		// 	data: 'testp@c.com',
+		// };
 		console.log(result);
 		output.innerHTML = `Form data sent to server:<br>
 		  email: ${formData.email}<br>
@@ -153,7 +180,7 @@ combineLatest([email$, password$, cbo$]).subscribe(() => {
 
 button$.subscribe({
 	next(x) {
-		// console.log(`[BUTTON SUBSCRIBE] BUTTON was clicked`);
+		console.log(`[BUTTON SUBSCRIBE] BUTTON was clicked`);
 	},
 	error(err) {
 		console.log('[BTN SUBSCRIBE]', err.message);
