@@ -116,27 +116,19 @@ function registerEmail2(regEmail) {
 	};
 }
 const ajaxOptions = {
-	method: 'get',
+	method: 'POST',
 	headers: {
 		'Content-Type': 'application/json',
-		'X-Requested-With': 'XMLHttpRequest',
 	},
+	body: JSON.stringify({
+		email: 'p@c.com',
+	}),
 };
 const button$ = fromEvent(button, 'click').pipe(
-	switchMap(() =>
-		ajax(
-			'https://wp-html.co.uk/greece/wp-json/wp/v2/posts?_fields=authorName,id,content,title,link,acf',
-			ajaxOptions,
-		),
-	),
+	switchMap(() => ajax('https://reqres.in/api/user', ajaxOptions)),
 	tap((jsonData) => {
 		let result = jsonData.response;
-		// let result = {
-		// 	api: 'wphtml-api-v1-mirror 1.0.0',
-		// 	valid: true,
-		// 	message: 'MIRROR data returned',
-		// 	data: 'testp@c.com',
-		// };
+
 		console.log(result);
 		output.innerHTML = `Form data sent to server:<br>
 		  email: ${formData.email}<br>
@@ -144,10 +136,10 @@ const button$ = fromEvent(button, 'click').pipe(
 		  agree:  ${formData.agree}<br>
 
 		  <b>
-			API: ${result.api}<br>
-			Registration status: ${result.valid}<br>
-		  Message: ${result.message}</br>
-		  Email: ${result.data}</b>
+			API: ${result.data[0].id}<br>
+			Registration status: ${result.data[0].name}<br>
+		  Message: ${result.data[0].color}</br>
+		  Email: ${result.data[0].pantone_value}</b>
 
 		  `;
 	}),
