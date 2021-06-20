@@ -141,59 +141,56 @@ const ajaxOptions = {
 	}),
 };
 const arr = [];
-const button$ = fromEvent(button, 'click')
-	.pipe(
-		concatMap(() => {
-			console.log('111111111111111111111');
-			const val = ajax.getJSON(`http://localhost:3000/x`);
-			console.log('val', val);
+const button$ = fromEvent(button, 'click').pipe(
+	concatMap(() => {
+		//	console.log('111111111111111111111');
+		const val = ajax.getJSON(`http://localhost:3000/x`);
+		//	console.log('val', val);
 
-			return val;
-		}),
-		concatMap((x) => {
-			console.log('22222222222222222222');
-			console.log('local x route', x);
-			console.log('random user');
-			const rndUser = ajax.getJSON(`https://randomuser.me/api/?results=3}`);
-			arr.push(x);
-			return rndUser;
-		}),
+		return val;
+	}),
+	concatMap((x) => {
+		arr.push(x);
 
-		concatMap((randomUser) => {
-			console.log('333333333333');
-			console.log('randomuser', randomUser);
-			console.log('route c');
-			const c = ajax.getJSON(`http://localhost:3000/c?r=0.9`);
-			arr.push(randomUser);
-			return c;
-		}),
-		// concatMap((res) => {
-		// 	console.log('initial value', res);
-		// 	return ajax.getJSON('https://api.github.com/users/google');
-		// }),
-		// concatMap((ajaxResponseOfGoogle) => {
-		// 	console.log('ajaxResponseOfGoogle', ajaxResponseOfGoogle);
-		// 	return ajax.getJSON('https://api.github.com/users/microsoft');
-		// }),
-		// concatMap((ajaxResponseOfMicrosoft) => {
-		// 	console.log('ajaxResponseOfMicrosoft', ajaxResponseOfMicrosoft);
-		// 	return ajax.getJSON('https://api.github.com/users');
-		// }),
-		concatMap((ajaxResponseOfUsers) => {
-			arr.push(ajaxResponseOfUsers);
-			console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
-			return of(ajaxResponseOfUsers);
-		}),
-	)
-	.subscribe({
-		next(ajaxResponse) {
-			console.log('ajaxResponse', ajaxResponse);
-			console.log('arr', arr);
-		},
-		error(error) {
-			console.error(error);
-		},
-		complete(res) {
-			console.log('complete with ', res);
-		},
-	});
+		const c = ajax.getJSON(`http://localhost:3000/d?r=0.3`);
+
+		return c;
+	}),
+	concatMap((d) => {
+		//	console.log('22222222222222222222');
+		//	console.log('local d route', x);
+		//	console.log('random user');
+		arr.push(d);
+		const rndUser = ajax.getJSON(`https://randomuser.me/api/?results=3}`);
+
+		return rndUser;
+	}),
+
+	concatMap((randomUser) => {
+		//	console.log('333333333333');
+		//console.log('randomuser', randomUser);
+		//console.log('route c');
+		arr.push(randomUser);
+		const c = ajax.getJSON(`http://localhost:3000/c?r=0.9`);
+
+		return c;
+	}),
+
+	concatMap((ajaxResponseOfUsers) => {
+		arr.push(ajaxResponseOfUsers);
+		//console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
+		return of(ajaxResponseOfUsers);
+	}),
+);
+button$.subscribe({
+	next() {
+		console.log('arr', arr);
+		console.log('arr[0]', arr[0]);
+	},
+	error(error) {
+		console.error(error);
+	},
+	complete(res) {
+		console.log('complete with ', res);
+	},
+});

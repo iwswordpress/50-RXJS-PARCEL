@@ -11783,50 +11783,44 @@ var ajaxOptions = {
 };
 var arr = [];
 var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.concatMap)(function () {
-  console.log('111111111111111111111');
+  //	console.log('111111111111111111111');
+  var val = _ajax.ajax.getJSON("http://localhost:3000/x"); //	console.log('val', val);
 
-  var val = _ajax.ajax.getJSON("http://localhost:3000/x");
 
-  console.log('val', val);
   return val;
 }), (0, _operators.concatMap)(function (x) {
-  console.log('22222222222222222222');
-  console.log('local x route', x);
-  console.log('random user');
+  arr.push(x);
+
+  var c = _ajax.ajax.getJSON("http://localhost:3000/d?r=0.3");
+
+  return c;
+}), (0, _operators.concatMap)(function (d) {
+  //	console.log('22222222222222222222');
+  //	console.log('local d route', x);
+  //	console.log('random user');
+  arr.push(d);
 
   var rndUser = _ajax.ajax.getJSON("https://randomuser.me/api/?results=3}");
 
-  arr.push(x);
   return rndUser;
 }), (0, _operators.concatMap)(function (randomUser) {
-  console.log('333333333333');
-  console.log('randomuser', randomUser);
-  console.log('route c');
+  //	console.log('333333333333');
+  //console.log('randomuser', randomUser);
+  //console.log('route c');
+  arr.push(randomUser);
 
   var c = _ajax.ajax.getJSON("http://localhost:3000/c?r=0.9");
 
-  arr.push(randomUser);
   return c;
-}), // concatMap((res) => {
-// 	console.log('initial value', res);
-// 	return ajax.getJSON('https://api.github.com/users/google');
-// }),
-// concatMap((ajaxResponseOfGoogle) => {
-// 	console.log('ajaxResponseOfGoogle', ajaxResponseOfGoogle);
-// 	return ajax.getJSON('https://api.github.com/users/microsoft');
-// }),
-// concatMap((ajaxResponseOfMicrosoft) => {
-// 	console.log('ajaxResponseOfMicrosoft', ajaxResponseOfMicrosoft);
-// 	return ajax.getJSON('https://api.github.com/users');
-// }),
-(0, _operators.concatMap)(function (ajaxResponseOfUsers) {
-  arr.push(ajaxResponseOfUsers);
-  console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
+}), (0, _operators.concatMap)(function (ajaxResponseOfUsers) {
+  arr.push(ajaxResponseOfUsers); //console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
+
   return (0, _rxjs.of)(ajaxResponseOfUsers);
-})).subscribe({
-  next: function next(ajaxResponse) {
-    console.log('ajaxResponse', ajaxResponse);
+}));
+button$.subscribe({
+  next: function next() {
     console.log('arr', arr);
+    console.log('arr[0]', arr[0]);
   },
   error: function error(_error) {
     console.error(_error);
