@@ -106,37 +106,6 @@ const password$ = fromEvent(password, 'keyup').pipe(
 
 const cbo$ = fromEvent(cbo, 'click').pipe(tap(() => (formData.agree = cbo.checked)));
 
-const ajaxOptions = {
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-	body: JSON.stringify({
-		email: 'p@c.com',
-	}),
-};
-const button$ = fromEvent(button, 'click').pipe(
-	switchMap(() => ajax('https://reqres.in/api/user', ajaxOptions)),
-
-	tap((jsonData) => {
-		let result = jsonData.response;
-
-		console.log(result);
-		output.innerHTML = `Form data sent to server:<br>
-		  email: ${formData.email}<br>
-		  password: ${formData.password}<br>
-		  agree:  ${formData.agree}<br>
-
-		  <b>
-			API: ${result.data[0].id}<br>
-			Registration status: ${result.data[0].name}<br>
-		  Message: ${result.data[0].color}</br>
-		  Email: ${result.data[0].pantone_value}</b>
-
-		  `;
-	}),
-);
-
 combineLatest([email$, password$, cbo$]).subscribe(() => {
 	console.log(`%C Form Data: `, formData);
 	if (formData.validEmail && formData.emailAvailable && formData.validPassword && formData.agree) {
@@ -159,6 +128,38 @@ combineLatest([email$, password$, cbo$]).subscribe(() => {
 		output.innerHTML = errMsg;
 	}
 });
+
+///////////////////////////////////////////////////
+const ajaxOptions = {
+	method: 'POST',
+	headers: {
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		email: formData.email,
+	}),
+};
+const button$ = fromEvent(button, 'click').pipe(
+	mergeMap(() => ajax(`https://reqres.in/api/user/${Math.floor(Math.random() * 6) + 1}`, ajaxOptions)),
+
+	tap((jsonData) => {
+		let result = jsonData.response;
+
+		console.log(result);
+		output.innerHTML = `Form data sent to server:<br>
+		  email: ${formData.email}<br>
+		  password: ${formData.password}<br>
+		  agree:  ${formData.agree}<br>
+
+		  <b>
+			API: ${result.data.id}<br>
+			Registration status: ${result.data.name}<br>
+		  Message: ${result.data.color}</br>
+		  Email: ${result.data.pantone_value}</b>
+
+		  `;
+	}),
+);
 
 // Subscribers
 

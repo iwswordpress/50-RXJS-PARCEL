@@ -11745,22 +11745,6 @@ var password$ = (0, _rxjs.fromEvent)(password, 'keyup').pipe((0, _operators.debo
 var cbo$ = (0, _rxjs.fromEvent)(cbo, 'click').pipe((0, _operators.tap)(function () {
   return formData.agree = cbo.checked;
 }));
-var ajaxOptions = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    email: 'p@c.com'
-  })
-};
-var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.switchMap)(function () {
-  return (0, _ajax.ajax)('https://reqres.in/api/user', ajaxOptions);
-}), (0, _operators.tap)(function (jsonData) {
-  var result = jsonData.response;
-  console.log(result);
-  output.innerHTML = "Form data sent to server:<br>\n\t\t  email: ".concat(formData.email, "<br>\n\t\t  password: ").concat(formData.password, "<br>\n\t\t  agree:  ").concat(formData.agree, "<br>\n\n\t\t  <b>\n\t\t\tAPI: ").concat(result.data[0].id, "<br>\n\t\t\tRegistration status: ").concat(result.data[0].name, "<br>\n\t\t  Message: ").concat(result.data[0].color, "</br>\n\t\t  Email: ").concat(result.data[0].pantone_value, "</b>\n\n\t\t  ");
-}));
 (0, _rxjs.combineLatest)([email$, password$, cbo$]).subscribe(function () {
   console.log("%C Form Data: ", formData);
 
@@ -11785,7 +11769,24 @@ var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.switchMa
 
     output.innerHTML = errMsg;
   }
-}); // Subscribers
+}); ///////////////////////////////////////////////////
+
+var ajaxOptions = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: formData.email
+  })
+};
+var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.mergeMap)(function () {
+  return (0, _ajax.ajax)("https://reqres.in/api/user/".concat(Math.floor(Math.random() * 6) + 1), ajaxOptions);
+}), (0, _operators.tap)(function (jsonData) {
+  var result = jsonData.response;
+  console.log(result);
+  output.innerHTML = "Form data sent to server:<br>\n\t\t  email: ".concat(formData.email, "<br>\n\t\t  password: ").concat(formData.password, "<br>\n\t\t  agree:  ").concat(formData.agree, "<br>\n\n\t\t  <b>\n\t\t\tAPI: ").concat(result.data.id, "<br>\n\t\t\tRegistration status: ").concat(result.data.name, "<br>\n\t\t  Message: ").concat(result.data.color, "</br>\n\t\t  Email: ").concat(result.data.pantone_value, "</b>\n\n\t\t  ");
+})); // Subscribers
 
 button$.subscribe({
   next: function next(x) {
@@ -11830,7 +11831,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54546" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56141" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
