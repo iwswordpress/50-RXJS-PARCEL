@@ -11782,22 +11782,20 @@ var ajaxOptions = {
   })
 };
 var arr = [];
-var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.concatMap)(function () {
-  //	console.log('111111111111111111111');
-  var val = _ajax.ajax.getJSON("http://localhost:3000/x"); //	console.log('val', val);
+var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as we want to have identifiable order in the array arr
+(0, _operators.concatMap)(function () {
+  var val = _ajax.ajax.getJSON("http://localhost:3000/x");
 
-
+  console.log('before flattening', val);
   return val;
-}), (0, _operators.concatMap)(function (x) {
-  arr.push(x);
+}), (0, _operators.concatMap)(function (val) {
+  console.log('after flattening', val);
+  arr.push(val);
 
   var c = _ajax.ajax.getJSON("http://localhost:3000/d?r=0.3");
 
   return c;
 }), (0, _operators.concatMap)(function (d) {
-  //	console.log('22222222222222222222');
-  //	console.log('local d route', x);
-  //	console.log('random user');
   arr.push(d);
 
   var rndUser = _ajax.ajax.getJSON("https://randomuser.me/api/?results=3}");
@@ -11861,7 +11859,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58710" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53247" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
