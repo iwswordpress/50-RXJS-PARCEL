@@ -11782,29 +11782,35 @@ var ajaxOptions = {
   })
 };
 var arr = [];
-var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as we want to have identifiable order in the array arr
+var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as we want to have identifiable order in the array
 (0, _operators.concatMap)(function () {
   var val = _ajax.ajax.getJSON("http://localhost:3000/x");
 
   console.log('before flattening', val);
   return val;
-}), (0, _operators.concatMap)(function (val) {
-  console.log('after flattening', val);
-  arr.push(val);
+}), (0, _operators.concatMap)(function (objId) {
+  console.log('after flattening', objId);
+  console.log(objId.value);
+  arr.push(objId);
 
   var c = _ajax.ajax.getJSON("http://localhost:3000/d?r=0.3");
 
   return c;
-}), (0, _operators.concatMap)(function (d) {
+}), (0, _operators.delay)(2000), (0, _operators.concatMap)(function (d) {
   arr.push(d);
+  var id = arr[0].value;
+  console.log('id = ' + id);
+  var url = "https://randomuser.me/api/?results=".concat(id);
+  console.log(url);
 
-  var rndUser = _ajax.ajax.getJSON("https://randomuser.me/api/?results=3}");
+  var rndUser = _ajax.ajax.getJSON(url);
 
+  url;
   return rndUser;
 }), (0, _operators.concatMap)(function (randomUser) {
   //	console.log('333333333333');
-  //console.log('randomuser', randomUser);
-  //console.log('route c');
+  console.log('randomuser', randomUser); //console.log('route c');
+
   arr.push(randomUser);
 
   var c = _ajax.ajax.getJSON("http://localhost:3000/c?r=0.9");
@@ -11859,7 +11865,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53247" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50590" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

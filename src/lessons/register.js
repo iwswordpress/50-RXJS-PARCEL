@@ -142,28 +142,35 @@ const ajaxOptions = {
 };
 const arr = [];
 const button$ = fromEvent(button, 'click').pipe(
-	// we need concat as we want to have identifiable order in the array arr
+	// we need concat as we want to have identifiable order in the array
 	concatMap(() => {
 		const val = ajax.getJSON(`http://localhost:3000/x`);
 		console.log('before flattening', val);
 
 		return val;
 	}),
-	concatMap((val) => {
-		console.log('after flattening', val);
-		arr.push(val);
+	concatMap((objId) => {
+		console.log('after flattening', objId);
+		console.log(objId.value);
+		arr.push(objId);
 		const c = ajax.getJSON(`http://localhost:3000/d?r=0.3`);
 		return c;
 	}),
+	delay(2000),
 	concatMap((d) => {
 		arr.push(d);
-		const rndUser = ajax.getJSON(`https://randomuser.me/api/?results=3}`);
+		const id = arr[0].value;
+		console.log('id = ' + id);
+		const url = `https://randomuser.me/api/?results=${id}`;
+		console.log(url);
+		const rndUser = ajax.getJSON(url);
+		url;
 		return rndUser;
 	}),
 
 	concatMap((randomUser) => {
 		//	console.log('333333333333');
-		//console.log('randomuser', randomUser);
+		console.log('randomuser', randomUser);
 		//console.log('route c');
 		arr.push(randomUser);
 		const c = ajax.getJSON(`http://localhost:3000/c?r=0.9`);
