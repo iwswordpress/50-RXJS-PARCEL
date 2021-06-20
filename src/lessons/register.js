@@ -117,6 +117,7 @@ const ajaxOptions = {
 };
 const button$ = fromEvent(button, 'click').pipe(
 	switchMap(() => ajax('https://reqres.in/api/user', ajaxOptions)),
+
 	tap((jsonData) => {
 		let result = jsonData.response;
 
