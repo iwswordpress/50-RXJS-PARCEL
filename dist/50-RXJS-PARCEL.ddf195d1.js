@@ -11692,7 +11692,8 @@ var formData = {
   email: '',
   password: '',
   agree: false,
-  emailAvailable: false
+  emailAvailable: false,
+  id: 1
 };
 var regEmail = new FormData(); // DOM elements
 
@@ -11780,23 +11781,58 @@ var ajaxOptions = {
     email: formData.email
   })
 };
-var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.mergeMap)(function () {
-  return (0, _ajax.ajax)("https://reqres.in/api/user/".concat(Math.floor(Math.random() * 6) + 1), ajaxOptions);
-}), (0, _operators.tap)(function (jsonData) {
-  var result = jsonData.response;
-  console.log(result);
-  output.innerHTML = "Form data sent to server:<br>\n\t\t  email: ".concat(formData.email, "<br>\n\t\t  password: ").concat(formData.password, "<br>\n\t\t  agree:  ").concat(formData.agree, "<br>\n\n\t\t  <b>\n\t\t\tAPI: ").concat(result.data.id, "<br>\n\t\t\tRegistration status: ").concat(result.data.name, "<br>\n\t\t  Message: ").concat(result.data.color, "</br>\n\t\t  Email: ").concat(result.data.pantone_value, "</b>\n\n\t\t  ");
-})); // Subscribers
+var arr = [];
+var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe((0, _operators.concatMap)(function () {
+  console.log('111111111111111111111');
 
-button$.subscribe({
-  next: function next(x) {
-    console.log("[BUTTON SUBSCRIBE] BUTTON was clicked");
+  var val = _ajax.ajax.getJSON("http://localhost:3000/x");
+
+  console.log('val', val);
+  return val;
+}), (0, _operators.concatMap)(function (x) {
+  console.log('22222222222222222222');
+  console.log('local x route', x);
+  console.log('random user');
+
+  var rndUser = _ajax.ajax.getJSON("https://randomuser.me/api/?results=3}");
+
+  arr.push(x);
+  return rndUser;
+}), (0, _operators.concatMap)(function (randomUser) {
+  console.log('333333333333');
+  console.log('randomuser', randomUser);
+  console.log('route c');
+
+  var c = _ajax.ajax.getJSON("http://localhost:3000/c?r=0.9");
+
+  arr.push(randomUser);
+  return c;
+}), // concatMap((res) => {
+// 	console.log('initial value', res);
+// 	return ajax.getJSON('https://api.github.com/users/google');
+// }),
+// concatMap((ajaxResponseOfGoogle) => {
+// 	console.log('ajaxResponseOfGoogle', ajaxResponseOfGoogle);
+// 	return ajax.getJSON('https://api.github.com/users/microsoft');
+// }),
+// concatMap((ajaxResponseOfMicrosoft) => {
+// 	console.log('ajaxResponseOfMicrosoft', ajaxResponseOfMicrosoft);
+// 	return ajax.getJSON('https://api.github.com/users');
+// }),
+(0, _operators.concatMap)(function (ajaxResponseOfUsers) {
+  arr.push(ajaxResponseOfUsers);
+  console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
+  return (0, _rxjs.of)(ajaxResponseOfUsers);
+})).subscribe({
+  next: function next(ajaxResponse) {
+    console.log('ajaxResponse', ajaxResponse);
+    console.log('arr', arr);
   },
-  error: function error(err) {
-    console.log('[BTN SUBSCRIBE]', err.message);
+  error: function error(_error) {
+    console.error(_error);
   },
-  complete: function complete() {
-    console.log('Button Completed');
+  complete: function complete(res) {
+    console.log('complete with ', res);
   }
 });
 },{"rxjs":"../../node_modules/rxjs/dist/esm5/index.js","rxjs/operators":"../../node_modules/rxjs/dist/esm5/operators/index.js","rxjs/ajax":"../../node_modules/rxjs/dist/esm5/ajax/index.js","../util/helpers.js":"../util/helpers.js"}],"../../index.js":[function(require,module,exports) {
@@ -11831,7 +11867,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56141" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58710" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

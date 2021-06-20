@@ -49,6 +49,7 @@ const formData = {
 	password: '',
 	agree: false,
 	emailAvailable: false,
+	id: 1,
 };
 var regEmail = new FormData();
 // DOM elements
@@ -139,38 +140,60 @@ const ajaxOptions = {
 		email: formData.email,
 	}),
 };
-const button$ = fromEvent(button, 'click').pipe(
-	mergeMap(() => ajax(`https://reqres.in/api/user/${Math.floor(Math.random() * 6) + 1}`, ajaxOptions)),
+const arr = [];
+const button$ = fromEvent(button, 'click')
+	.pipe(
+		concatMap(() => {
+			console.log('111111111111111111111');
+			const val = ajax.getJSON(`http://localhost:3000/x`);
+			console.log('val', val);
 
-	tap((jsonData) => {
-		let result = jsonData.response;
+			return val;
+		}),
+		concatMap((x) => {
+			console.log('22222222222222222222');
+			console.log('local x route', x);
+			console.log('random user');
+			const rndUser = ajax.getJSON(`https://randomuser.me/api/?results=3}`);
+			arr.push(x);
+			return rndUser;
+		}),
 
-		console.log(result);
-		output.innerHTML = `Form data sent to server:<br>
-		  email: ${formData.email}<br>
-		  password: ${formData.password}<br>
-		  agree:  ${formData.agree}<br>
-
-		  <b>
-			API: ${result.data.id}<br>
-			Registration status: ${result.data.name}<br>
-		  Message: ${result.data.color}</br>
-		  Email: ${result.data.pantone_value}</b>
-
-		  `;
-	}),
-);
-
-// Subscribers
-
-button$.subscribe({
-	next(x) {
-		console.log(`[BUTTON SUBSCRIBE] BUTTON was clicked`);
-	},
-	error(err) {
-		console.log('[BTN SUBSCRIBE]', err.message);
-	},
-	complete() {
-		console.log('Button Completed');
-	},
-});
+		concatMap((randomUser) => {
+			console.log('333333333333');
+			console.log('randomuser', randomUser);
+			console.log('route c');
+			const c = ajax.getJSON(`http://localhost:3000/c?r=0.9`);
+			arr.push(randomUser);
+			return c;
+		}),
+		// concatMap((res) => {
+		// 	console.log('initial value', res);
+		// 	return ajax.getJSON('https://api.github.com/users/google');
+		// }),
+		// concatMap((ajaxResponseOfGoogle) => {
+		// 	console.log('ajaxResponseOfGoogle', ajaxResponseOfGoogle);
+		// 	return ajax.getJSON('https://api.github.com/users/microsoft');
+		// }),
+		// concatMap((ajaxResponseOfMicrosoft) => {
+		// 	console.log('ajaxResponseOfMicrosoft', ajaxResponseOfMicrosoft);
+		// 	return ajax.getJSON('https://api.github.com/users');
+		// }),
+		concatMap((ajaxResponseOfUsers) => {
+			arr.push(ajaxResponseOfUsers);
+			console.log('ajaxResponseOfUsers', ajaxResponseOfUsers);
+			return of(ajaxResponseOfUsers);
+		}),
+	)
+	.subscribe({
+		next(ajaxResponse) {
+			console.log('ajaxResponse', ajaxResponse);
+			console.log('arr', arr);
+		},
+		error(error) {
+			console.error(error);
+		},
+		complete(res) {
+			console.log('complete with ', res);
+		},
+	});
