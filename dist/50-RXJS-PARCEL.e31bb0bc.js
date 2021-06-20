@@ -11675,7 +11675,7 @@ function printLatLon(value, id, city, lat, lon) {
   item.className = '';
   container.appendChild(item);
 }
-},{}],"src/lessons/register3.js":[function(require,module,exports) {
+},{}],"src/lessons/register.js":[function(require,module,exports) {
 "use strict";
 
 var _rxjs = require("rxjs");
@@ -11801,8 +11801,8 @@ button$.subscribe({
 },{"rxjs":"node_modules/rxjs/dist/esm5/index.js","rxjs/operators":"node_modules/rxjs/dist/esm5/operators/index.js","rxjs/ajax":"node_modules/rxjs/dist/esm5/ajax/index.js","../util/helpers.js":"src/util/helpers.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
-require("./src/lessons/register3");
-},{"./src/lessons/register3":"src/lessons/register3.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+require("./src/lessons/register.js");
+},{"./src/lessons/register.js":"src/lessons/register.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
