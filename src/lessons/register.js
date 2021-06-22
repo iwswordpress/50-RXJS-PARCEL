@@ -141,17 +141,22 @@ const ajaxOptions = {
 	}),
 };
 const arr = [];
+
 const button$ = fromEvent(button, 'click').pipe(
 	// we need concat as we want to have identifiable order in the array
 	concatMap(() => {
-		const val = ajax.getJSON(`http://localhost:3000/x`);
+		const val = ajax.getJSON(`http://localhost:3000/x?x=10`);
 		console.log('before flattening', val);
 
 		return val;
 	}),
 	concatMap((objId) => {
 		console.log('after flattening', objId);
-		console.log(objId.value);
+		console.log(`%cVALUE ${objId.value}`, 'color:blue; font-size:18px;');
+		console.log(
+			`%cWe will store this value [${objId.value}] to use as an argument in a later AJAX call `,
+			'color:blue; font-size:18px;',
+		);
 		arr.push(objId);
 		const c = ajax.getJSON(`http://localhost:3000/d?r=0.3`);
 		return c;
@@ -160,7 +165,10 @@ const button$ = fromEvent(button, 'click').pipe(
 	concatMap((d) => {
 		arr.push(d);
 		const id = arr[0].value;
-		console.log('id = ' + id);
+		console.log(
+			`%c${id} value obtained from first AJAX now used to get ${id} items in response from random user.me`,
+			'color:blue;font-size:18px;',
+		);
 		const url = `https://randomuser.me/api/?results=${id}`;
 		console.log(url);
 		const rndUser = ajax.getJSON(url);
@@ -169,8 +177,10 @@ const button$ = fromEvent(button, 'click').pipe(
 	}),
 
 	concatMap((randomUser) => {
-		//	console.log('333333333333');
+		const id = arr[0].value;
+		console.log(`%c=========== ${id} RANDOM USERS ===========`, 'color:blue; font-size:18px;');
 		console.log('randomuser', randomUser);
+		console.log(`%c=========== ${id} RANDOM USERS ===========`, 'color:blue; font-size:18px;');
 		//console.log('route c');
 		arr.push(randomUser);
 		const c = ajax.getJSON(`http://localhost:3000/c?r=0.9`);

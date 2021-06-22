@@ -11784,13 +11784,14 @@ var ajaxOptions = {
 var arr = [];
 var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as we want to have identifiable order in the array
 (0, _operators.concatMap)(function () {
-  var val = _ajax.ajax.getJSON("http://localhost:3000/x");
+  var val = _ajax.ajax.getJSON("http://localhost:3000/x?x=10");
 
   console.log('before flattening', val);
   return val;
 }), (0, _operators.concatMap)(function (objId) {
   console.log('after flattening', objId);
-  console.log(objId.value);
+  console.log("%cVALUE ".concat(objId.value), 'color:blue; font-size:18px;');
+  console.log("%cWe will store this value [".concat(objId.value, "] to use as an argument in a later AJAX call "), 'color:blue; font-size:18px;');
   arr.push(objId);
 
   var c = _ajax.ajax.getJSON("http://localhost:3000/d?r=0.3");
@@ -11799,7 +11800,7 @@ var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as w
 }), (0, _operators.delay)(2000), (0, _operators.concatMap)(function (d) {
   arr.push(d);
   var id = arr[0].value;
-  console.log('id = ' + id);
+  console.log("%c".concat(id, " value obtained from first AJAX now used to get ").concat(id, " items in response from random user.me"), 'color:blue;font-size:18px;');
   var url = "https://randomuser.me/api/?results=".concat(id);
   console.log(url);
 
@@ -11808,8 +11809,10 @@ var button$ = (0, _rxjs.fromEvent)(button, 'click').pipe( // we need concat as w
   url;
   return rndUser;
 }), (0, _operators.concatMap)(function (randomUser) {
-  //	console.log('333333333333');
-  console.log('randomuser', randomUser); //console.log('route c');
+  var id = arr[0].value;
+  console.log("%c=========== ".concat(id, " RANDOM USERS ==========="), 'color:blue; font-size:18px;');
+  console.log('randomuser', randomUser);
+  console.log("%c=========== ".concat(id, " RANDOM USERS ==========="), 'color:blue; font-size:18px;'); //console.log('route c');
 
   arr.push(randomUser);
 
@@ -11865,7 +11868,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50590" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64544" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
